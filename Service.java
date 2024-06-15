@@ -20,4 +20,17 @@ public class Service {
     public double getPrice() {
         return price;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + id + "\nService Name: " + name + "\nPrice: " + "Rp " + price;
+    }
 }
