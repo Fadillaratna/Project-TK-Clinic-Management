@@ -16,8 +16,8 @@ public class ClinicManagement {
     private static int counterAppointments = 1;
     private static int counterPrescriptions = 1;
     private static int counterMedicalRecord = 1;
-    private static int counterTransaction = 1;
-    private static int counterTransactionDetail = 1;
+    private static int counterTransactions = 1;
+    private static int counterTransactionsDetail = 1;
 
     public ClinicManagement() {
         doctors = new ArrayList<>();
@@ -50,9 +50,9 @@ public class ClinicManagement {
             case "medicalrecord":
                 return dateNow + "MDR" + String.format("%04d", counterMedicalRecord++);
             case "transaction":
-                return dateNow + "TRS" + String.format("%04d", counterTransaction++);
+                return dateNow + "TRS" + String.format("%04d", counterTransactions++);
             case "transactiondetail":
-                return dateNow + "TRD" + String.format("%04d", counterTransactionDetail++);
+                return dateNow + "TRD" + String.format("%04d", counterTransactionsDetail++);
             default:
                 throw new AssertionError();
         }

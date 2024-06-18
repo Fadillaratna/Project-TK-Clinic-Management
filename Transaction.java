@@ -25,8 +25,8 @@ public class Transaction {
         return transactionDetails;
     }
 
-    public void setIdTransaction(String idTransaction) {
-        this.id = idTransaction;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setAppointment(Appointment appointment) {

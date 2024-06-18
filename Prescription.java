@@ -18,7 +18,7 @@ public class Prescription {
         return id;
     }
 
-    public String getMedicineName() {
+    public String getName() {
         return name;
     }
 
@@ -34,7 +34,7 @@ public class Prescription {
         this.id = id;
     }
 
-    public void setMedicineName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
