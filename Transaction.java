@@ -6,6 +6,8 @@ public class Transaction {
     private String id;
     private Appointment appointment;
     private List<TransactionDetail> transactionDetails;
+    private double totalPayment;
+    private double totalReturn;
 
     public Transaction(String id, Appointment appointment) {
         this.id = id;
@@ -25,6 +27,14 @@ public class Transaction {
         return transactionDetails;
     }
 
+    public double getTotalPayment() {
+        return totalPayment;
+    }
+
+    public double getTotalReturn() {
+        return totalReturn;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -37,8 +47,25 @@ public class Transaction {
         this.transactionDetails = transactionDetails;
     }
 
+    public void setTotalPayment(double totalPayment) {
+        this.totalPayment = totalPayment;
+    }
+
+    public void setTotalReturn(double totalReturn) {
+        this.totalReturn = totalReturn;
+    }
+
     public void addTransactionDetail(TransactionDetail transactionDetail) {
         transactionDetails.add(transactionDetail);
+    }
+
+    public double calculateTotalTransaction() {
+        double total = 0;
+        for (TransactionDetail detail : transactionDetails) {
+            total += detail.getPrice();
+        }
+
+        return total;
     }
 
     public void displayTransaction() {
@@ -61,6 +88,13 @@ public class Transaction {
 
         System.out.printf("---------------------------------------------------------%n");
         System.out.printf("| %-30s | %-20s |%n", "Total", "Rp " + total);
-        System.out.printf("---------------------------------------------------------%n");
+
+        if (totalPayment != 0.0 && !Double.isNaN(totalPayment)) {
+            System.out.printf("| %-30s | %-20s |%n", "Total Payment", "Rp " + totalPayment);
+            System.out.printf("| %-30s | %-20s |%n", "Total Return", "Rp " + totalReturn);
+            System.out.printf("---------------------------------------------------------%n");
+        } else {
+            System.out.printf("---------------------------------------------------------%n");
+        }
     }
 }

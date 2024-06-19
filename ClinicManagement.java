@@ -455,7 +455,6 @@ public class ClinicManagement {
         TransactionDetail transactionDetail = new TransactionDetail(idTransactionDetail, service, service.getPrice());
 
         if (foundedTransaction != null) {
-
             foundedTransaction.addTransactionDetail(transactionDetail);
         } else {
             String idTransaction = generateId("transaction");
@@ -505,6 +504,40 @@ public class ClinicManagement {
         }
     }
 
+    public void payTransaction(String idAppointment, double totalPayment) {
+        Transaction transaction = findTransactionByAppointmentId(idAppointment);
+
+        if (transaction != null) {
+            double totalReturn = totalPayment - transaction.calculateTotalTransaction();
+            if (totalReturn >= 0) {
+                transaction.setTotalPayment(totalPayment);
+                transaction.setTotalReturn(totalReturn);
+
+                System.out.println("\nTransaction was successfully processed!\n");
+            }
+        } else {
+            System.out.println("Transaction not found!");
+        }
+    }
+
+    public void displayTransactonByAppointmentId(String idAppointment) {
+        Transaction transaction = findTransactionByAppointmentId(idAppointment);
+
+        transaction.displayTransaction();
+    }
+
+    public boolean isAlreadyPaid(String idAppointment) {
+        Transaction foundedTransaction = findTransactionByAppointmentId(idAppointment);
+
+        if (foundedTransaction != null) {
+            if (foundedTransaction.getTotalPayment() != 0.0 && !Double.isNaN(foundedTransaction.getTotalPayment())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public Transaction findTransactionByAppointmentId(String idAppointment) {
         for (Transaction transaction : transactions) {
             if (transaction.getAppointment().getId().equals(idAppointment)) {
@@ -513,6 +546,7 @@ public class ClinicManagement {
         }
         return null;
     }
+
     // #endregion
 
 }

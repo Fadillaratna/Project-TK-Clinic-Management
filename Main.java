@@ -536,37 +536,63 @@ public class Main {
 
                     Appointment foundedAppointment = clinic.findAppointmentById(idAppointment);
                     if (foundedAppointment != null) {
-                        boolean addMore = true;
-                        while (addMore) {
-                            clinic.displayServices();
+                        if (!clinic.isAlreadyPaid(idAppointment)) {
+                            boolean addMore = true;
+                            while (addMore) {
+                                clinic.displayServices();
 
-                            System.out.print("Enter service id: ");
-                            String idService = scanner.nextLine();
+                                System.out.print("Enter service id: ");
+                                String idService = scanner.nextLine();
 
-                            Service foundedService = clinic.findServiceById(idService);
+                                Service foundedService = clinic.findServiceById(idService);
 
-                            if (foundedService != null) {
-                                clinic.processTransaction(idAppointment, idService);
+                                if (foundedService != null) {
+                                    clinic.processTransaction(idAppointment, idService);
 
-                                System.out.println(
-                                        "Do you want to add more service transactions to the appointmend ID "
-                                                + idAppointment + " ?\n");
-                                System.out.print("Input [0:No] [1:Yes]: ");
-                                int selectedOption = scanner.nextInt();
-                                scanner.nextLine();
+                                    System.out.println(
+                                            "Do you want to add more service transactions to the appointmend ID "
+                                                    + idAppointment + " ?\n");
+                                    System.out.print("Input [0:No] [1:Yes]: ");
+                                    int selectedOption = scanner.nextInt();
+                                    scanner.nextLine();
 
-                                switch (selectedOption) {
-                                    case 0:
-                                        addMore = false;
-                                        break;
-                                    case 1:
-                                        break;
-                                    default:
-                                        System.out.println("Your selected option not valid!");
+                                    switch (selectedOption) {
+                                        case 0:
+                                            addMore = false;
+                                            boolean notPaid = true;
+
+                                            while (notPaid) {
+                                                clinic.displayTransactonByAppointmentId(idAppointment);
+
+                                                System.out.print("Enter total payment: ");
+                                                double totalPayment = scanner.nextDouble();
+                                                scanner.nextLine();
+
+                                                Transaction transaction = clinic
+                                                        .findTransactionByAppointmentId(idAppointment);
+
+                                                if (totalPayment >= transaction.calculateTotalTransaction()) {
+                                                    clinic.payTransaction(idAppointment, totalPayment);
+                                                    clinic.displayTransactonByAppointmentId(idAppointment);
+
+                                                    notPaid = false;
+                                                } else {
+                                                    System.out.println("\nTotal payment not match!\n");
+                                                }
+                                            }
+
+                                            break;
+                                        case 1:
+                                            break;
+                                        default:
+                                            System.out.println("Your selected option not valid!");
+                                    }
+                                } else {
+                                    System.out.println("Service not found!");
                                 }
-                            } else {
-                                System.out.println("Service not found!");
                             }
+                        }else{
+                            System.out.println("\nTransaction is already registered!\n");
                         }
                     } else {
                         System.out.println("Appointment not found!");
