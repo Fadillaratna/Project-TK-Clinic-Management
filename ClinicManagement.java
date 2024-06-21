@@ -319,9 +319,9 @@ public class ClinicManagement {
         Appointment foundedAppointment = findAppointmentById(idAppointment);
 
         String idPrescription = generateId("prescription");
-        Prescription prescription = new Prescription(idPrescription, medicineName, quantity, dosage);
+        Prescription newPrescription = new Prescription(idPrescription, medicineName, quantity, dosage);
 
-        foundedAppointment.addPrescription(prescription);
+        foundedAppointment.addPrescription(newPrescription);
         System.out.println("Prescription Registered Successfull");
     }
 
@@ -400,8 +400,8 @@ public class ClinicManagement {
 
         String idMedicalRecord = generateId("medicalrecord");
 
-        MedicalRecord medicalRecord = new MedicalRecord(idMedicalRecord, complaint, diagnosis, foundedAppointment);
-        medicalRecords.add(medicalRecord);
+        MedicalRecord newMedicalRecord = new MedicalRecord(idMedicalRecord, complaint, diagnosis, foundedAppointment);
+        medicalRecords.add(newMedicalRecord);
 
         System.out.println("Medical Record Registered Successfull");
     }
@@ -447,21 +447,21 @@ public class ClinicManagement {
 
     // #region Transaction
     public void processTransaction(String idAppointment, String idService) {
-        Service service = findServiceById(idService);
+        Service foundedService = findServiceById(idService);
         Transaction foundedTransaction = findTransactionByAppointmentId(idAppointment);
         Appointment foundedAppointment = findAppointmentById(idAppointment);
 
         String idTransactionDetail = generateId("transactiondetail");
-        TransactionDetail transactionDetail = new TransactionDetail(idTransactionDetail, service, service.getPrice());
+        TransactionDetail newTransactionDetail = new TransactionDetail(idTransactionDetail, foundedService, foundedService.getPrice());
 
         if (foundedTransaction != null) {
-            foundedTransaction.addTransactionDetail(transactionDetail);
+            foundedTransaction.addTransactionDetail(newTransactionDetail);
         } else {
             String idTransaction = generateId("transaction");
-            Transaction transaction = new Transaction(idTransaction, foundedAppointment);
-            transactions.add(transaction);
+            Transaction newTransaction = new Transaction(idTransaction, foundedAppointment);
+            transactions.add(newTransaction);
 
-            transaction.addTransactionDetail(transactionDetail);
+            newTransaction.addTransactionDetail(newTransactionDetail);
         }
     }
 
@@ -505,13 +505,13 @@ public class ClinicManagement {
     }
 
     public void payTransaction(String idAppointment, double totalPayment) {
-        Transaction transaction = findTransactionByAppointmentId(idAppointment);
+        Transaction foundedTransaction = findTransactionByAppointmentId(idAppointment);
 
-        if (transaction != null) {
-            double totalReturn = totalPayment - transaction.calculateTotalTransaction();
+        if (foundedTransaction != null) {
+            double totalReturn = totalPayment - foundedTransaction.calculateTotalTransaction();
             if (totalReturn >= 0) {
-                transaction.setTotalPayment(totalPayment);
-                transaction.setTotalReturn(totalReturn);
+                foundedTransaction.setTotalPayment(totalPayment);
+                foundedTransaction.setTotalReturn(totalReturn);
 
                 System.out.println("\nTransaction was successfully processed!\n");
             }
@@ -521,9 +521,9 @@ public class ClinicManagement {
     }
 
     public void displayTransactonByAppointmentId(String idAppointment) {
-        Transaction transaction = findTransactionByAppointmentId(idAppointment);
+        Transaction foundedTransaction = findTransactionByAppointmentId(idAppointment);
 
-        transaction.displayTransaction();
+        foundedTransaction.displayTransaction();
     }
 
     public boolean isAlreadyPaid(String idAppointment) {
