@@ -4,14 +4,16 @@ import java.util.List;
 
 public class Transaction {
     private String id;
+    private Cashier cashier;
     private Appointment appointment;
     private List<TransactionDetail> transactionDetails;
     private double totalPayment;
     private double totalReturn;
 
-    public Transaction(String id, Appointment appointment) {
+    public Transaction(String id, Appointment appointment, Cashier cashier) {
         this.id = id;
         this.appointment = appointment;
+        this.cashier = cashier;
         this.transactionDetails = new ArrayList<>();
     }
 
@@ -20,6 +22,10 @@ public class Transaction {
     }
 
     public Appointment getAppointment() {
+        return appointment;
+    }
+
+    public Appointment getCashier() {
         return appointment;
     }
 
@@ -41,6 +47,10 @@ public class Transaction {
 
     public void setAppointment(Appointment appointment) {
         this.appointment = appointment;
+    }
+
+    public void setCashier(Cashier cashier) {
+        this.cashier = cashier;
     }
 
     public void setTransactionDetails(List<TransactionDetail> transactionDetails) {
@@ -71,6 +81,7 @@ public class Transaction {
     public void displayTransaction() {
         System.out.println(
                 "Date: " + new SimpleDateFormat("dd/MM/yyyy").format(appointment.getAppointmentDate()));
+        System.out.println("Cashier Name : " + cashier.getName());
         System.out.println("---------------------------------------------------------------");
         System.out.println(appointment.getPatient());
         System.out.println("---------------------------------------------------------------");

@@ -11,6 +11,10 @@ public class Main {
     public static void main(String[] args) {
 
         while (true) {
+            //add data cashierand administration staff first(hardcode)
+            addDataCashier();
+            addDataAdministrationStaff();
+
             System.out.println(
                     "\n============================== Clinic Management System ==============================");
             System.out.println("1. Doctor Menu");
@@ -56,6 +60,20 @@ public class Main {
 
             }
         }
+    }
+
+    public static void addDataCashier(){
+        clinic.addCashier("Iriana Dewi", "iriana@gmail.com");
+        clinic.addCashier("Olivia Jane", "olivia@gmail.com");
+        clinic.addCashier("Bambang Jaya", "bambang@gmail.com");
+        clinic.addCashier("Aditya Putra", "aditya@gmail.com");
+    }
+
+    public static void addDataAdministrationStaff(){
+        clinic.addAdmStaff("Cahya Laisya", "cahya@gmail.com");
+        clinic.addAdmStaff("Syifa Ayu", "syifa@gmail.com");
+        clinic.addAdmStaff("Abirama", "abirama@gmail.com");
+        clinic.addAdmStaff("Arindi Putri", "arindi@gmail.com");
     }
 
     public static void doctorMenu() {
@@ -529,73 +547,82 @@ public class Main {
                 case 0:
                     return;
                 case 1:
-                    clinic.displayAppointments();
+                    clinic.displayCashiers();
+                    System.out.print("Enter Cashier ID: ");
+                    String idCashier = scanner.nextLine();
 
-                    System.out.print("Enter appointment id: ");
-                    String idAppointment = scanner.nextLine();
+                    Cashier foundedCashier = clinic.findCashierById(idCashier);
+                    if(foundedCashier != null){
+                        clinic.displayAppointments();
 
-                    Appointment foundedAppointment = clinic.findAppointmentById(idAppointment);
-                    if (foundedAppointment != null) {
-                        if (!clinic.isAlreadyPaid(idAppointment)) {
-                            boolean addMore = true;
-                            while (addMore) {
-                                clinic.displayServices();
+                        System.out.print("Enter appointment id: ");
+                        String idAppointment = scanner.nextLine();
 
-                                System.out.print("Enter service id: ");
-                                String idService = scanner.nextLine();
+                        Appointment foundedAppointment = clinic.findAppointmentById(idAppointment);
+                        if (foundedAppointment != null) {
+                            if (!clinic.isAlreadyPaid(idAppointment)) {
+                                boolean addMore = true;
+                                while (addMore) {
+                                    clinic.displayServices();
 
-                                Service foundedService = clinic.findServiceById(idService);
+                                    System.out.print("Enter service id: ");
+                                    String idService = scanner.nextLine();
 
-                                if (foundedService != null) {
-                                    clinic.processTransaction(idAppointment, idService);
+                                    Service foundedService = clinic.findServiceById(idService);
 
-                                    System.out.println(
-                                            "Do you want to add more service transactions to the appointmend ID "
-                                                    + idAppointment + " ?\n");
-                                    System.out.print("Input [0:No] [1:Yes]: ");
-                                    int selectedOption = scanner.nextInt();
-                                    scanner.nextLine();
+                                    if (foundedService != null) {
+                                        clinic.processTransaction(idAppointment, idService, idCashier);
 
-                                    switch (selectedOption) {
-                                        case 0:
-                                            addMore = false;
-                                            boolean notPaid = true;
+                                        System.out.println(
+                                                "Do you want to add more service transactions to the appointmend ID "
+                                                        + idAppointment + " ?\n");
+                                        System.out.print("Input [0:No] [1:Yes]: ");
+                                        int selectedOption = scanner.nextInt();
+                                        scanner.nextLine();
 
-                                            while (notPaid) {
-                                                clinic.displayTransactonByAppointmentId(idAppointment);
+                                        switch (selectedOption) {
+                                            case 0:
+                                                addMore = false;
+                                                boolean notPaid = true;
 
-                                                System.out.print("Enter total payment: ");
-                                                double totalPayment = scanner.nextDouble();
-                                                scanner.nextLine();
-
-                                                Transaction transaction = clinic
-                                                        .findTransactionByAppointmentId(idAppointment);
-
-                                                if (totalPayment >= transaction.calculateTotalTransaction()) {
-                                                    clinic.payTransaction(idAppointment, totalPayment);
+                                                while (notPaid) {
                                                     clinic.displayTransactonByAppointmentId(idAppointment);
 
-                                                    notPaid = false;
-                                                } else {
-                                                    System.out.println("\nTotal payment not match!\n");
-                                                }
-                                            }
+                                                    System.out.print("Enter total payment: ");
+                                                    double totalPayment = scanner.nextDouble();
+                                                    scanner.nextLine();
 
-                                            break;
-                                        case 1:
-                                            break;
-                                        default:
-                                            System.out.println("Your selected option not valid!");
+                                                    Transaction transaction = clinic
+                                                            .findTransactionByAppointmentId(idAppointment);
+
+                                                    if (totalPayment >= transaction.calculateTotalTransaction()) {
+                                                        clinic.payTransaction(idAppointment, totalPayment);
+                                                        clinic.displayTransactonByAppointmentId(idAppointment);
+
+                                                        notPaid = false;
+                                                    } else {
+                                                        System.out.println("\nTotal payment not match!\n");
+                                                    }
+                                                }
+
+                                                break;
+                                            case 1:
+                                                break;
+                                            default:
+                                                System.out.println("Your selected option not valid!");
+                                        }
+                                    } else {
+                                        System.out.println("Service not found!");
                                     }
-                                } else {
-                                    System.out.println("Service not found!");
                                 }
+                            }else{
+                                System.out.println("\nTransaction is already registered!\n");
                             }
-                        }else{
-                            System.out.println("\nTransaction is already registered!\n");
+                        } else {
+                            System.out.println("Appointment not found!");
                         }
-                    } else {
-                        System.out.println("Appointment not found!");
+                    }else{
+                        System.out.println("Cashier not found!");
                     }
 
                     break;

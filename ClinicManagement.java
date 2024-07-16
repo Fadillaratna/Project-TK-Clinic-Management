@@ -10,6 +10,8 @@ public class ClinicManagement {
     private List<Appointment> appointments;
     private List<Transaction> transactions;
     private List<MedicalRecord> medicalRecords;
+    private List<Cashier> cashiers;
+    private List<AdministrationStaff> admStaffs;
     private static int counterDoctors = 1;
     private static int counterServices = 1;
     private static int counterPatients = 1;
@@ -18,6 +20,8 @@ public class ClinicManagement {
     private static int counterMedicalRecord = 1;
     private static int counterTransactions = 1;
     private static int counterTransactionsDetail = 1;
+    private static int counterCashier = 1;
+    private static int counterAdmStaff = 1;
 
     public ClinicManagement() {
         doctors = new ArrayList<>();
@@ -26,6 +30,8 @@ public class ClinicManagement {
         appointments = new ArrayList<>();
         medicalRecords = new ArrayList<>();
         transactions = new ArrayList<>();
+        cashiers = new ArrayList<>();
+        admStaffs = new ArrayList<>();
     }
 
     private static String getCurrentDate() {
@@ -53,6 +59,10 @@ public class ClinicManagement {
                 return dateNow + "TRS" + String.format("%04d", counterTransactions++);
             case "transactiondetail":
                 return dateNow + "TRD" + String.format("%04d", counterTransactionsDetail++);
+            case "cashier":
+                return dateNow + "CSR" + String.format("%04d", counterCashier++);
+            case "admstaff":
+            return dateNow + "ADM" + String.format("%04d", counterAdmStaff++);
             default:
                 throw new AssertionError();
         }
@@ -446,10 +456,11 @@ public class ClinicManagement {
     // #endregion
 
     // #region Transaction
-    public void processTransaction(String idAppointment, String idService) {
+    public void processTransaction(String idAppointment, String idService, String idCashier) {
         Service foundedService = findServiceById(idService);
         Transaction foundedTransaction = findTransactionByAppointmentId(idAppointment);
         Appointment foundedAppointment = findAppointmentById(idAppointment);
+        Cashier foundedCashier = findCashierById(idCashier);
 
         String idTransactionDetail = generateId("transactiondetail");
         TransactionDetail newTransactionDetail = new TransactionDetail(idTransactionDetail, foundedService, foundedService.getPrice());
@@ -458,7 +469,7 @@ public class ClinicManagement {
             foundedTransaction.addTransactionDetail(newTransactionDetail);
         } else {
             String idTransaction = generateId("transaction");
-            Transaction newTransaction = new Transaction(idTransaction, foundedAppointment);
+            Transaction newTransaction = new Transaction(idTransaction, foundedAppointment, foundedCashier);
             transactions.add(newTransaction);
 
             newTransaction.addTransactionDetail(newTransactionDetail);
@@ -549,4 +560,90 @@ public class ClinicManagement {
 
     // #endregion
 
+    // #region Cashier
+    public void addCashier(String name, String email) {
+        Cashier foundedCashier = findCashierByNameAndEmail(name, email);
+        if (foundedCashier == null) {
+        
+            String id = generateId("cashier");
+
+            Cashier newCashier = new Cashier(id, name, email);
+            cashiers.add(newCashier);
+        }
+    }
+
+    public void displayCashiers() {
+        if (!(cashiers.isEmpty())) {
+            System.out.println("\nList of Cashiers:");
+            for (int i = 1; i <= cashiers.size(); i++) {
+                System.out.println("Cashier#" + i);
+                System.out.println(cashiers.get(i - 1) + "\n");
+            }
+        } else {
+            System.out.println("No cashier available.");
+        }
+    }
+
+    public Cashier findCashierByNameAndEmail(String name, String email) {
+        for (Cashier cashier : cashiers) {
+            if (cashier.getName().equalsIgnoreCase(name)
+                    && cashier.getEmail().equalsIgnoreCase(email)) {
+                return cashier;
+            }
+        }
+        return null;
+    }
+
+    public Cashier findCashierById(String id) {
+        for (Cashier cashier : cashiers) {
+            if (cashier.getId().equals(id)) {
+                return cashier;
+            }
+        }
+        return null;
+    }
+    // #endregion
+
+    // #region Adm Staff
+    public void addAdmStaff(String name, String email) {
+        AdministrationStaff foundedAdm = findAdministrationStaffByNameAndEmail(name, email);
+        if (foundedAdm == null) {
+            String id = generateId("admstaff");
+
+            AdministrationStaff newAdm = new AdministrationStaff(id, name, email);
+            admStaffs.add(newAdm);
+        }
+    }
+
+    public void displayAdmStaff() {
+        if (!(admStaffs.isEmpty())) {
+            System.out.println("\nList of Administration Staff:");
+            for (int i = 1; i <= admStaffs.size(); i++) {
+                System.out.println("Adm Staff#" + i);
+                System.out.println(admStaffs.get(i - 1) + "\n");
+            }
+        } else {
+            System.out.println("No admin staff available.");
+        }
+    }
+
+    public AdministrationStaff findAdministrationStaffByNameAndEmail(String name, String email) {
+        for (AdministrationStaff administrationStaff : admStaffs) {
+            if (administrationStaff.getName().equalsIgnoreCase(name)
+                    && administrationStaff.getEmail().equalsIgnoreCase(email)) {
+                return administrationStaff;
+            }
+        }
+        return null;
+    }
+
+    public AdministrationStaff findAdministrationStaffById(String id) {
+        for (AdministrationStaff administrationStaff : admStaffs) {
+            if (administrationStaff.getId().equals(id)) {
+                return administrationStaff;
+            }
+        }
+        return null;
+    }
+    // #endregion
 }

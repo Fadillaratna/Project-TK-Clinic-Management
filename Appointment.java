@@ -16,7 +16,6 @@ public class Appointment {
         this.doctor = doctor;
         this.appointmentDate = appointmentDate;
         this.prescriptions = new ArrayList<>();
-
     }
 
     public String getId() {

@@ -11,7 +11,6 @@ public class Prescription {
         this.name = name;
         this.quantity = quantity;
         this.dosage = dosage;
-        
     }
 
     public String getId() {
