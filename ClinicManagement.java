@@ -62,7 +62,7 @@ public class ClinicManagement {
             case "cashier":
                 return dateNow + "CSR" + String.format("%04d", counterCashier++);
             case "admstaff":
-            return dateNow + "ADM" + String.format("%04d", counterAdmStaff++);
+                return dateNow + "ADM" + String.format("%04d", counterAdmStaff++);
             default:
                 throw new AssertionError();
         }
@@ -118,22 +118,17 @@ public class ClinicManagement {
     }
 
     public Doctor findDoctorById(String id) {
-        for (Doctor doctor : doctors) {
-            if (doctor.getId().equals(id)) {
-                return doctor;
-            }
-        }
-        return null;
+        return doctors.stream()
+                .filter(doctor -> doctor.getId().equals(id))
+                .findFirst()
+                .orElse(null);
     }
 
     public Doctor findDoctorByNameAndSpecialization(String name, String specialization) {
-        for (Doctor doctor : doctors) {
-            if (doctor.getName().equalsIgnoreCase(name)
-                    && doctor.getSpecialization().equalsIgnoreCase(specialization)) {
-                return doctor;
-            }
-        }
-        return null;
+        return doctors.stream()
+                .filter(doctor -> doctor.getName().equals(name) && doctor.getSpecialization().equals(specialization))
+                .findFirst()
+                .orElse(null);
     }
     // #endregion
 
@@ -188,21 +183,17 @@ public class ClinicManagement {
     }
 
     public Service findServiceByName(String name) {
-        for (Service service : services) {
-            if (service.getName().equals(name)) {
-                return service;
-            }
-        }
-        return null;
+        return services.stream()
+                .filter(service -> service.getName().equals(name))
+                .findFirst()
+                .orElse(null);
     }
 
     public Service findServiceById(String id) {
-        for (Service service : services) {
-            if (service.getId().equals(id)) {
-                return service;
-            }
-        }
-        return null;
+        return services.stream()
+                .filter(service -> service.getId().equals(id))
+                .findFirst()
+                .orElse(null);
     }
     // #endregion
 
@@ -253,12 +244,10 @@ public class ClinicManagement {
     }
 
     public Patient findPatientById(String id) {
-        for (Patient patient : patients) {
-            if (patient.getId().equals(id)) {
-                return patient;
-            }
-        }
-        return null;
+        return patients.stream()
+                .filter(patient -> patient.getId().equals(id))
+                .findFirst()
+                .orElse(null);
     }
     // #endregion
 
@@ -315,12 +304,10 @@ public class ClinicManagement {
     }
 
     public Appointment findAppointmentById(String id) {
-        for (Appointment appointment : appointments) {
-            if (appointment.getId().equals(id)) {
-                return appointment;
-            }
-        }
-        return null;
+        return appointments.stream()
+                .filter(appointment -> appointment.getId().equals(id))
+                .findFirst()
+                .orElse(null);
     }
     // #endregion
 
@@ -463,7 +450,8 @@ public class ClinicManagement {
         Cashier foundedCashier = findCashierById(idCashier);
 
         String idTransactionDetail = generateId("transactiondetail");
-        TransactionDetail newTransactionDetail = new TransactionDetail(idTransactionDetail, foundedService, foundedService.getPrice());
+        TransactionDetail newTransactionDetail = new TransactionDetail(idTransactionDetail, foundedService,
+                foundedService.getPrice());
 
         if (foundedTransaction != null) {
             foundedTransaction.addTransactionDetail(newTransactionDetail);
@@ -550,12 +538,10 @@ public class ClinicManagement {
     }
 
     public Transaction findTransactionByAppointmentId(String idAppointment) {
-        for (Transaction transaction : transactions) {
-            if (transaction.getAppointment().getId().equals(idAppointment)) {
-                return transaction;
-            }
-        }
-        return null;
+        return transactions.stream()
+                .filter(trans -> trans.getAppointment().getId().equals(idAppointment))
+                .findFirst()
+                .orElse(null);
     }
 
     // #endregion
@@ -564,7 +550,7 @@ public class ClinicManagement {
     public void addCashier(String name, String email) {
         Cashier foundedCashier = findCashierByNameAndEmail(name, email);
         if (foundedCashier == null) {
-        
+
             String id = generateId("cashier");
 
             Cashier newCashier = new Cashier(id, name, email);
@@ -585,22 +571,17 @@ public class ClinicManagement {
     }
 
     public Cashier findCashierByNameAndEmail(String name, String email) {
-        for (Cashier cashier : cashiers) {
-            if (cashier.getName().equalsIgnoreCase(name)
-                    && cashier.getEmail().equalsIgnoreCase(email)) {
-                return cashier;
-            }
-        }
-        return null;
+        return cashiers.stream()
+                .filter(cashier -> cashier.getName().equals(name) && cashier.getEmail().equals(email))
+                .findFirst()
+                .orElse(null);
     }
 
     public Cashier findCashierById(String id) {
-        for (Cashier cashier : cashiers) {
-            if (cashier.getId().equals(id)) {
-                return cashier;
-            }
-        }
-        return null;
+        return cashiers.stream()
+                .filter(cashier -> cashier.getId().equals(id))
+                .findFirst()
+                .orElse(null);
     }
     // #endregion
 
@@ -628,22 +609,17 @@ public class ClinicManagement {
     }
 
     public AdministrationStaff findAdministrationStaffByNameAndEmail(String name, String email) {
-        for (AdministrationStaff administrationStaff : admStaffs) {
-            if (administrationStaff.getName().equalsIgnoreCase(name)
-                    && administrationStaff.getEmail().equalsIgnoreCase(email)) {
-                return administrationStaff;
-            }
-        }
-        return null;
+        return admStaffs.stream()
+                .filter(adm -> adm.getName().equals(name) && adm.getEmail().equals(email))
+                .findFirst()
+                .orElse(null);
     }
 
     public AdministrationStaff findAdministrationStaffById(String id) {
-        for (AdministrationStaff administrationStaff : admStaffs) {
-            if (administrationStaff.getId().equals(id)) {
-                return administrationStaff;
-            }
-        }
-        return null;
+        return admStaffs.stream()
+                .filter(adm -> adm.getId().equals(id))
+                .findFirst()
+                .orElse(null);
     }
     // #endregion
 }
