@@ -374,7 +374,7 @@ public class ClinicManagement {
         }
 
         if (hasPrescriptions) {
-            System.out.println("\nList of Appointments:");
+            System.out.println("\nList of Prescriptions:");
 
             int i = 0;
             for (Appointment appointment : searchResult) {
