@@ -9,8 +9,8 @@ public class Main {
     static ClinicManagement clinic = new ClinicManagement();
 
     public static void main(String[] args) {
-
-        while (true) {
+        boolean running = true;
+        while (running) {
             //add data cashierand administration staff first(hardcode)
             addDataCashier();
             addDataAdministrationStaff();
@@ -29,36 +29,45 @@ public class Main {
 
             int selectionMenu = scanner.nextInt();
             scanner.nextLine();
-
-            switch (selectionMenu) {
-                case 0:
+        
+            running = switch (selectionMenu) {
+                case 0 -> {
                     exitApplication();
-                    break;
-                case 1:
+                    yield false;
+                }
+                case 1 -> {
                     doctorMenu();
-                    break;
-                case 2:
+                    yield true;
+                }
+                case 2 -> {
                     serviceMenu();
-                    break;
-                case 3:
+                    yield true;
+                }
+                case 3 -> {
                     patientMenu();
-                    break;
-                case 4:
+                    yield true;
+                }
+                case 4 -> {
                     appointmentMenu();
-                    break;
-                case 5:
+                    yield true;
+                }
+                case 5 -> {
                     medicalRecordMenu();
-                    break;
-                case 6:
+                    yield true;
+                }
+                case 6 -> {
                     prescriptionMenu();
-                    break;
-                case 7:
+                    yield true;
+                }
+                case 7 -> {
                     transactionMenu();
-                    break;
-                default:
+                    yield true;
+                }
+                default -> {
                     System.out.println("Invalid menu code. Please enter a valid menu code!");
-
-            }
+                    yield true;
+                }
+            };
         }
     }
 
