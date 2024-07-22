@@ -16,6 +16,6 @@ public class Cashier extends User {
 
     @Override
     public String toString(){
-        return "ID Cashier: " + id + "\n" + super.toString("Cashier");
+        return "ID Cashier: " + id + "\n" + super.toString();
     }
 }

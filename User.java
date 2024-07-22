@@ -23,7 +23,7 @@ public class User {
         this.email = email;
     }
 
-    public String toString(String role) {
-        return role + " Name: " + name + "\nEmail: " + email;
+    public String toString() {
+        return "Name: " + name + "\nEmail: " + email;
     }
 }

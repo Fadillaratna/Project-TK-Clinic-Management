@@ -16,7 +16,7 @@ public class AdministrationStaff extends User {
 
     @Override
     public String toString(){
-        return "ID Adm Staff: " + id + "\n" + super.toString("Adm Staff");
+        return "ID Adm Staff: " + id + "\n" + super.toString();
     }
     
 }
