@@ -1,4 +1,3 @@
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,16 +11,6 @@ public class ClinicManagement {
     private List<MedicalRecord> medicalRecords;
     private List<Cashier> cashiers;
     private List<AdministrationStaff> admStaffs;
-    private static int counterDoctors = 1;
-    private static int counterServices = 1;
-    private static int counterPatients = 1;
-    private static int counterAppointments = 1;
-    private static int counterPrescriptions = 1;
-    private static int counterMedicalRecord = 1;
-    private static int counterTransactions = 1;
-    private static int counterTransactionsDetail = 1;
-    private static int counterCashier = 1;
-    private static int counterAdmStaff = 1;
 
     public ClinicManagement() {
         doctors = new ArrayList<>();
@@ -34,38 +23,8 @@ public class ClinicManagement {
         admStaffs = new ArrayList<>();
     }
 
-    private static String getCurrentDate() {
-        return new SimpleDateFormat("yyyyMMdd").format(new Date());
-
-    }
-
-    private static String generateId(String type) {
-        String dateNow = getCurrentDate();
-
-        switch (type) {
-            case "doctor":
-                return dateNow + "DOC" + String.format("%04d", counterDoctors++);
-            case "service":
-                return dateNow + "SVC" + String.format("%04d", counterServices++);
-            case "patient":
-                return dateNow + "PTT" + String.format("%04d", counterPatients++);
-            case "appointment":
-                return dateNow + "APN" + String.format("%04d", counterAppointments++);
-            case "prescription":
-                return dateNow + "PRN" + String.format("%04d", counterPrescriptions++);
-            case "medicalrecord":
-                return dateNow + "MDR" + String.format("%04d", counterMedicalRecord++);
-            case "transaction":
-                return dateNow + "TRS" + String.format("%04d", counterTransactions++);
-            case "transactiondetail":
-                return dateNow + "TRD" + String.format("%04d", counterTransactionsDetail++);
-            case "cashier":
-                return dateNow + "CSR" + String.format("%04d", counterCashier++);
-            case "admstaff":
-                return dateNow + "ADM" + String.format("%04d", counterAdmStaff++);
-            default:
-                throw new AssertionError();
-        }
+    static String generateId(IDGeneratorFunction idGenFunc) {
+        return idGenFunc.generate();
     }
 
     // #region Doctor
@@ -74,7 +33,7 @@ public class ClinicManagement {
         if (foundedDoctor != null) {
             System.out.println("Doctor already registered!");
         } else {
-            String id = generateId("doctor");
+            String id = generateId(IDGenerator::generateDoctorId);
 
             Doctor newDoctor = new Doctor(id, name, specialization);
             doctors.add(newDoctor);
@@ -138,7 +97,7 @@ public class ClinicManagement {
         if (service != null) {
             System.out.println("Service with Name " + serviceName + "already registered!");
         } else {
-            String id = generateId("service");
+            String id = generateId(IDGenerator::generateServiceId);
 
             Service newService = new Service(id, serviceName, servicePrice);
             services.add(newService);
@@ -200,7 +159,7 @@ public class ClinicManagement {
     // #region Patient
     public void addPatient(String name, String gender, int age) {
 
-        String id = generateId("patient");
+        String id = generateId(IDGenerator::generatePatientId);
 
         Patient newPatient = new Patient(id, name, gender, age);
         patients.add(newPatient);
@@ -256,7 +215,7 @@ public class ClinicManagement {
         Doctor foundedDoctor = findDoctorById(idDoctor);
         Patient foundedPatient = findPatientById(idPatient);
 
-        String idAppointment = generateId("appointment");
+        String idAppointment = generateId(IDGenerator::generateAppointmentId);
 
         Appointment appointment = new Appointment(idAppointment, foundedPatient, foundedDoctor, appointmentDate);
         appointments.add(appointment);
@@ -315,7 +274,7 @@ public class ClinicManagement {
     public void addPrescription(String idAppointment, String medicineName, int quantity, String dosage) {
         Appointment foundedAppointment = findAppointmentById(idAppointment);
 
-        String idPrescription = generateId("prescription");
+        String idPrescription = generateId(IDGenerator::generatePrescriptionId);
         Prescription newPrescription = new Prescription(idPrescription, medicineName, quantity, dosage);
 
         foundedAppointment.addPrescription(newPrescription);
@@ -395,7 +354,7 @@ public class ClinicManagement {
     public void addMedicalRecord(String idAppointment, String complaint, String diagnosis) {
         Appointment foundedAppointment = findAppointmentById(idAppointment);
 
-        String idMedicalRecord = generateId("medicalrecord");
+        String idMedicalRecord = generateId(IDGenerator::generateMedicalRecordId);;
 
         MedicalRecord newMedicalRecord = new MedicalRecord(idMedicalRecord, complaint, diagnosis, foundedAppointment);
         medicalRecords.add(newMedicalRecord);
@@ -449,14 +408,14 @@ public class ClinicManagement {
         Appointment foundedAppointment = findAppointmentById(idAppointment);
         Cashier foundedCashier = findCashierById(idCashier);
 
-        String idTransactionDetail = generateId("transactiondetail");
+        String idTransactionDetail = generateId(IDGenerator::generateTransactionDetailId);;
         TransactionDetail newTransactionDetail = new TransactionDetail(idTransactionDetail, foundedService,
                 foundedService.getPrice());
 
         if (foundedTransaction != null) {
             foundedTransaction.addTransactionDetail(newTransactionDetail);
         } else {
-            String idTransaction = generateId("transaction");
+            String idTransaction = generateId(IDGenerator::generateTransactionId);;
             Transaction newTransaction = new Transaction(idTransaction, foundedAppointment, foundedCashier);
             transactions.add(newTransaction);
 
@@ -551,7 +510,7 @@ public class ClinicManagement {
         Cashier foundedCashier = findCashierByNameAndEmail(name, email);
         if (foundedCashier == null) {
 
-            String id = generateId("cashier");
+            String id = generateId(IDGenerator::generateCashierId);
 
             Cashier newCashier = new Cashier(id, name, email);
             cashiers.add(newCashier);
@@ -589,7 +548,7 @@ public class ClinicManagement {
     public void addAdmStaff(String name, String email) {
         AdministrationStaff foundedAdm = findAdministrationStaffByNameAndEmail(name, email);
         if (foundedAdm == null) {
-            String id = generateId("admstaff");
+            String id = generateId(IDGenerator::generateAdmStaffId);
 
             AdministrationStaff newAdm = new AdministrationStaff(id, name, email);
             admStaffs.add(newAdm);
