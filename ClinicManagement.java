@@ -11,8 +11,10 @@ public class ClinicManagement {
     private List<MedicalRecord> medicalRecords;
     private List<Cashier> cashiers;
     private List<AdministrationStaff> admStaffs;
+    private Clinic clinic;
 
-    public ClinicManagement() {
+    public ClinicManagement(String clinicName, String address, String contact) {
+        this.clinic = new Clinic(clinicName, address, contact);
         doctors = new ArrayList<>();
         services = new ArrayList<>();
         patients = new ArrayList<>();
@@ -22,10 +24,14 @@ public class ClinicManagement {
         cashiers = new ArrayList<>();
         admStaffs = new ArrayList<>();
     }
-
+    
+    public Clinic getClinic() {
+        return clinic;
+    }
     static String generateId(IDGeneratorFunction idGenFunc) {
         return idGenFunc.generate();
     }
+
 
     // #region Doctor
     public void addDoctor(String name, String specialization) {
@@ -520,9 +526,12 @@ public class ClinicManagement {
     public void displayCashiers() {
         if (!(cashiers.isEmpty())) {
             System.out.println("\nList of Cashiers:");
-            for (int i = 1; i <= cashiers.size(); i++) {
-                System.out.println("Cashier#" + i);
-                System.out.println(cashiers.get(i - 1) + "\n");
+            int count = 1;
+            for (Object obj : cashiers) {
+                if (obj instanceof Cashier cashier) {
+                    System.out.println("Cashier#" + count++);
+                    System.out.println(cashier + "\n");
+                }
             }
         } else {
             System.out.println("No cashier available.");
@@ -558,9 +567,12 @@ public class ClinicManagement {
     public void displayAdmStaff() {
         if (!(admStaffs.isEmpty())) {
             System.out.println("\nList of Administration Staff:");
-            for (int i = 1; i <= admStaffs.size(); i++) {
-                System.out.println("Adm Staff#" + i);
-                System.out.println(admStaffs.get(i - 1) + "\n");
+            int count = 1;
+            for (Object obj : admStaffs) {
+                if (obj instanceof AdministrationStaff staff) {
+                    System.out.println("Adm Staff#" + count++);
+                    System.out.println(staff + "\n");
+                }
             }
         } else {
             System.out.println("No admin staff available.");

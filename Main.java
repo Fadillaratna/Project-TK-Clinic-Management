@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Main {
     static Scanner scanner = new Scanner(System.in);
-    static ClinicManagement clinic = new ClinicManagement();
+    static ClinicManagement clinic = new ClinicManagement("Clinic Dwita", "Jl Panglima Sudirman No 11A", "(0341) 77525");
 
     public static void main(String[] args) {
         boolean running = true;
@@ -15,8 +15,13 @@ public class Main {
             addDataCashier();
             addDataAdministrationStaff();
 
+            clinic.displayAdmStaff();
+
             System.out.println(
                     "\n============================== Clinic Management System ==============================");
+            System.out.println("Clinic Name: " + clinic.getClinic().clinicName());
+            System.out.println("Address: " + clinic.getClinic().address());
+            System.out.println("Contact: " + clinic.getClinic().contact());
             System.out.println("1. Doctor Menu");
             System.out.println("2. Service Menu");
             System.out.println("3. Patient Menu");
