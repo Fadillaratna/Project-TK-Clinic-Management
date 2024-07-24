@@ -1,4 +1,4 @@
-public class Cashier extends User {
+public final class Cashier extends User {
     private String id;
 
     public Cashier(String id, String name, String email) {

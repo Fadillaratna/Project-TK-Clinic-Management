@@ -1,4 +1,4 @@
-public class AdministrationStaff extends User {
+public final class AdministrationStaff extends User {
     private String id;
 
     public AdministrationStaff(String id, String name, String email) {

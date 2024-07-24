@@ -15,8 +15,6 @@ public class Main {
             addDataCashier();
             addDataAdministrationStaff();
 
-            clinic.displayAdmStaff();
-
             System.out.println(
                     "\n============================== Clinic Management System ==============================");
             System.out.println("Clinic Name: " + clinic.getClinic().clinicName());

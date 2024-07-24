@@ -1,4 +1,4 @@
-public class User {
+public sealed class User permits Cashier, AdministrationStaff{
     private String name;
     private String email;
 
